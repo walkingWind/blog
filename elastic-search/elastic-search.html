@@ -79,14 +79,17 @@
 
 
 
+<meta name="description" content="&amp;nbsp;本文大部分围绕es的基础查询展开。属于傻瓜式入门级文章。 前言1.es遵循restFul规范，GET（查询）POST（新增）PUT（修改）DELETE（删除） 2.es的请求url大致如下：localhost:9200/索引(index)/类型(type)/ID各版本es略有差异。es5还有type概念，es6+取消了type的概念。   3.官方的示例都是基于curl命令的，wind">
 <meta property="og:type" content="website">
-<meta property="og:title" content="elastic-search">
+<meta property="og:title" content="elastic-search基本操作">
 <meta property="og:url" content="http://yoursite.com/elastic-search/elastic-search.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="&amp;nbsp;本文大部分围绕es的基础查询展开。属于傻瓜式入门级文章。 前言1.es遵循restFul规范，GET（查询）POST（新增）PUT（修改）DELETE（删除） 2.es的请求url大致如下：localhost:9200/索引(index)/类型(type)/ID各版本es略有差异。es5还有type概念，es6+取消了type的概念。   3.官方的示例都是基于curl命令的，wind">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-24T08:54:38.086Z">
+<meta property="og:updated_time" content="2019-07-25T03:09:25.143Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="elastic-search">
+<meta name="twitter:title" content="elastic-search基本操作">
+<meta name="twitter:description" content="&amp;nbsp;本文大部分围绕es的基础查询展开。属于傻瓜式入门级文章。 前言1.es遵循restFul规范，GET（查询）POST（新增）PUT（修改）DELETE（删除） 2.es的请求url大致如下：localhost:9200/索引(index)/类型(type)/ID各版本es略有差异。es5还有type概念，es6+取消了type的概念。   3.官方的示例都是基于curl命令的，wind">
 
 
 
@@ -122,7 +125,7 @@
 
 
 
-  <title>elastic-search | Hexo</title>
+  <title>elastic-search基本操作 | Hexo</title>
   
 
 
@@ -302,7 +305,7 @@
     <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">elastic-search</h1>
+	<h1 class="post-title" itemprop="name headline">elastic-search基本操作</h1>
 
 
 
@@ -314,7 +317,28 @@
       <div class="post-body">
         
         
-          
+          <p>&nbsp;<br>本文大部分围绕es的基础查询展开。属于傻瓜式入门级文章。</p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>1.es遵循restFul规范，GET（查询）POST（新增）PUT（修改）DELETE（删除）</p>
+<p>2.es的请求url大致如下：<br>localhost:9200/索引(index)/类型(type)/ID<br>各版本es略有差异。es5还有type概念，es6+取消了type的概念。  </p>
+<p>3.官方的示例都是基于curl命令的，windows对curl的支持不是很好。json需要如下转义，非常麻烦<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ curl -X POST -d <span class="string">"&#123;\"firstName\": \"Bilbo\", \"lastName\": \"Baggins\"&#125;"</span> -H <span class="string">"Content-Type:application/json"</span> localhost:9200/customer/external?pretty</span><br></pre></td></tr></table></figure></p>
+<p>结论是用postman</p>
+<p>4.GET（查询）POST（新增）PUT（修改）DELETE（删除）都是可以发送请求头和请求体的（这个观点很重要）。<br>如果你的postman选择get请求时，body还是置灰的，那是你版本太低了！最新版的postman是支持get请求带请求体的。</p>
+<p>5.带密码的es查询url大致是这样的。http://用户名:密码@es服务器地址</p>
+<p>6.es2+开始把string分为 keyword 和 text 数据类型，keyword不会进行分词，text会进行分词。</p>
+<p>7.查询变量类型 _mapping<br>如下<br><a href="http://localhost:9200/index/type/_mapping?pretty=true" target="_blank" rel="noopener">http://localhost:9200/index/type/_mapping?pretty=true</a></p>
+<p>8.分词分析 _analyze<br>如下<br><a href="http://localhost:9200/index/_analyze" target="_blank" rel="noopener">http://localhost:9200/index/_analyze</a><br>参数传入想要查看的分词内容</p>
+<h2 id="es的基本查询"><a href="#es的基本查询" class="headerlink" title="es的基本查询"></a>es的基本查询</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">$ &#123;</span><br><span class="line">  <span class="string">"query"</span>: &#123; </span><br><span class="line">  	<span class="string">"match_all"</span>: &#123; <span class="string">"boost"</span> : 1.2 &#125;,</span><br><span class="line">  	<span class="string">"term"</span>: &#123;</span><br><span class="line">        <span class="string">"title"</span>: <span class="string">"elasticsearch"</span></span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"match"</span>:&#123;&#125;</span><br><span class="line">  	&#125;,</span><br><span class="line">  <span class="string">"_source"</span>:  [<span class="string">"id"</span>,<span class="string">"searchValue"</span>,<span class="string">"searchValueId"</span>,<span class="string">"count"</span>],</span><br><span class="line">  <span class="string">"stored_fields"</span>:[<span class="string">"preview"</span>,<span class="string">"title"</span>],</span><br><span class="line">  <span class="string">"sort"</span>: [</span><br><span class="line">    &#123; <span class="string">"id"</span>: <span class="string">"asc"</span> &#125;</span><br><span class="line">  ],</span><br><span class="line">  <span class="string">"from"</span>: 1,</span><br><span class="line">  <span class="string">"size"</span>: 100</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>请求体构造<br>最外层的<br>query用于构造查询条件<br>_source表示对结果进行处理，只取某些字段（网上说用fields，经过这个字段在es5中改为了stored_fields，但是并不起作用）<br>sort表示排序<br>from和size是分页</p>
+<p>下面说query内部的json<br>下面三个应该是不能同时存在的。代码为了方便，所以都写上去了。<br>term类似于精确查询（由于分词的关系，可能匹配不到）<br>match类似于模糊查询，类似数据库的like （match匹配会不计较顺序，如果需要计较顺序，则需要用短语匹配match_phrase）<br>match_all表示的是文档等分，这个不是很懂。”match_all”: {}表示文档得分是1，”match_all”: { “boost” : 1.2 }表示得分是1.2分</p>
+<h2 id="与或非及条件过滤查询"><a href="#与或非及条件过滤查询" class="headerlink" title="与或非及条件过滤查询"></a>与或非及条件过滤查询</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="string">"query"</span>: &#123; </span><br><span class="line">    <span class="string">"bool"</span>: &#123; </span><br><span class="line">      <span class="string">"must"</span>: [</span><br><span class="line">        &#123; <span class="string">"match"</span>: &#123; <span class="string">"title"</span>:   <span class="string">"Search"</span>        &#125;&#125;, </span><br><span class="line">        &#123; <span class="string">"match"</span>: &#123; <span class="string">"content"</span>: <span class="string">"Elasticsearch"</span> &#125;&#125;  </span><br><span class="line">      ],</span><br><span class="line">      <span class="string">"filter"</span>: [ </span><br><span class="line">        &#123; <span class="string">"term"</span>:  &#123; <span class="string">"status"</span>: <span class="string">"published"</span> &#125;&#125;, </span><br><span class="line">        &#123; <span class="string">"range"</span>: &#123; <span class="string">"publish_date"</span>: &#123; <span class="string">"gte"</span>: <span class="string">"2015-01-01"</span> &#125;&#125;&#125; </span><br><span class="line">      ]</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>bool表示一个组合查询（可以跟下面四个条件）<br>must<br>返回的文档必须满足must子句的条件，并且参与计算分值<br>filter<br>返回的文档必须满足filter子句的条件。但是不会像Must一样，参与计算分值<br>should<br>返回的文档可能满足should子句的条件。在一个Bool查询中，如果没有must或者filter，有一个或者多个should子句，那么只要满足一个就可以返回。minimum_should_match参数定义了至少满足几个子句。<br>must_nout<br>返回的文档必须不满足must_not定义的条件。</p>
+<h2 id="聚合查询"><a href="#聚合查询" class="headerlink" title="聚合查询"></a>聚合查询</h2><p>es聚合分为三大类：<br>度量聚合：在一组文档中对某一个数字字段进行计算得出指标值。<strong>通俗点讲就是直接求和，求平均这种，不需要分组。</strong><br>分组聚合：创建多个分组，每个分组都关联一个关键字和相关文档标准。当聚合执行的时候，所有的分组会根据自身标准评估每一个符合的文档。（分组聚合可以嵌套一个或者多个字聚合）。<br><strong>通俗点讲就是先进行分组，然后再求和，求平均等。</strong><br>管道聚合：这一类聚合的数据源是其他聚合的输出，然后进行相关指标的计算。<strong>通俗点讲就是最后的结果是基于多次聚合产生的，外层聚合结果依赖于内层聚合结果。这种聚合略难。</strong></p>
+<h3 id="度量聚合"><a href="#度量聚合" class="headerlink" title="度量聚合"></a>度量聚合</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line"><span class="string">"aggs"</span>:&#123;</span><br><span class="line">    <span class="string">"avg_age"</span>:&#123;	//自定义的显示结果名</span><br><span class="line">      <span class="string">"avg"</span>:&#123;  //与avg类似的，还有max、min、sum、value_count（数量）</span><br><span class="line">      	<span class="string">"field"</span>:<span class="string">"age"</span>	//聚合字段</span><br><span class="line">    		 &#125;</span><br><span class="line">    	&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="string">"size"</span>:0	//加上这个，表示只显示聚合结果，否则会先显示所有匹配到的数据，再显示结果</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其他的聚合就不举例子了，得自己领悟。</p>
+<h2 id="综合性查询"><a href="#综合性查询" class="headerlink" title="综合性查询"></a>综合性查询</h2><p>下面附上一段基于管道聚合的综合性查询代码。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">	<span class="string">"query"</span>: &#123;	//这里是查询内容筛选，包括match_phrase和filter</span><br><span class="line">		<span class="string">"bool"</span>: &#123;</span><br><span class="line">			<span class="string">"should"</span>: [&#123;</span><br><span class="line">				<span class="string">"match_phrase"</span>: &#123;</span><br><span class="line">					<span class="string">"searchValue"</span>: &#123;</span><br><span class="line">						<span class="string">"query"</span>: <span class="string">"奶粉"</span>,</span><br><span class="line">						<span class="string">"slop"</span>: 0,</span><br><span class="line">						<span class="string">"boost"</span>: 1.0</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;],</span><br><span class="line">			<span class="string">"minimum_should_match"</span>: 1,	//该参数用来控制应该匹配的分词的最少数量,需要写在should后面！</span><br><span class="line"></span><br><span class="line">			<span class="string">"filter"</span>: [&#123;</span><br><span class="line">				<span class="string">"range"</span>: &#123;</span><br><span class="line">					<span class="string">"statisticTime"</span>: &#123;</span><br><span class="line">						<span class="string">"gte"</span>: <span class="string">"2018-11-22 00:00:00"</span>,</span><br><span class="line">						<span class="string">"lte"</span>: <span class="string">"2019-05-21 23:59:59"</span>,</span><br><span class="line">						<span class="string">"format"</span>: <span class="string">"yyyy-MM-dd HH:mm:ss"</span></span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;]</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	//下面是对查询筛选后的结果进行聚合统计</span><br><span class="line">	<span class="string">"aggs"</span>: &#123;</span><br><span class="line">		<span class="string">"searchValue"</span>: &#123;</span><br><span class="line">			<span class="string">"terms"</span>: &#123;</span><br><span class="line">				<span class="string">"field"</span>: <span class="string">"searchValue.keyword"</span>,</span><br><span class="line">				//根据聚合结果进行排序</span><br><span class="line">				<span class="string">"order"</span> : &#123;<span class="string">"sumCount"</span> : <span class="string">"asc"</span> &#125;</span><br><span class="line">			&#125;,</span><br><span class="line">			<span class="string">"aggs"</span>: &#123;</span><br><span class="line">				<span class="string">"sumCount"</span>: &#123;</span><br><span class="line">					<span class="string">"value_count"</span>: &#123;</span><br><span class="line">						<span class="string">"field"</span>: <span class="string">"count"</span></span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;,</span><br><span class="line">		<span class="string">"max_score"</span>: &#123;//这是对第一次聚合后的结果进行二次聚合，筛选出了最大sumCount的那条数据</span><br><span class="line">			<span class="string">"max_bucket"</span>: &#123;</span><br><span class="line">				<span class="string">"buckets_path"</span>: <span class="string">"searchValue&gt;sumCount"</span></span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">		&#125;</span><br><span class="line">	&#125;,</span><br><span class="line">	<span class="string">"size"</span>: 0</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>参考<br><a href="https://www.cnblogs.com/xing901022/p/5994210.html" target="_blank" rel="noopener">https://www.cnblogs.com/xing901022/p/5994210.html</a><br><a href="https://blog.csdn.net/qq_26230421/article/details/81947517" target="_blank" rel="noopener">https://blog.csdn.net/qq_26230421/article/details/81947517</a><br><a href="https://www.cnblogs.com/ljhdo/p/4577065.html" target="_blank" rel="noopener">https://www.cnblogs.com/ljhdo/p/4577065.html</a></p>
+<p>聚合学习参考<br><a href="https://blog.csdn.net/weixin_41651116/article/details/81750116" target="_blank" rel="noopener">https://blog.csdn.net/weixin_41651116/article/details/81750116</a><br><a href="https://blog.csdn.net/weixin_41651116/article/details/81750472" target="_blank" rel="noopener">https://blog.csdn.net/weixin_41651116/article/details/81750472</a><br><a href="https://blog.csdn.net/weixin_41651116/article/details/81750480" target="_blank" rel="noopener">https://blog.csdn.net/weixin_41651116/article/details/81750480</a><br><a href="https://www.cnblogs.com/cnjavahome/p/9164078.html" target="_blank" rel="noopener">https://www.cnblogs.com/cnjavahome/p/9164078.html</a></p>
+
         
       </div>
       
@@ -356,8 +380,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -399,6 +432,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#es的基本查询"><span class="nav-number">2.</span> <span class="nav-text">es的基本查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#与或非及条件过滤查询"><span class="nav-number">3.</span> <span class="nav-text">与或非及条件过滤查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#聚合查询"><span class="nav-number">4.</span> <span class="nav-text">聚合查询</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#度量聚合"><span class="nav-number">4.1.</span> <span class="nav-text">度量聚合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#综合性查询"><span class="nav-number">5.</span> <span class="nav-text">综合性查询</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
