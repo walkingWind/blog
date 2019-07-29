@@ -79,14 +79,17 @@
 
 
 
+<meta name="description" content="&amp;nbsp;问题大致是这样的：数据库有45条数据，决定分5线程，去查询。然后，将数据结果进行合并。 编写一个Callable方法12345678910111213private Callable&amp;lt;List&amp;lt;Map&amp;lt;String, Object&amp;gt;&amp;gt;&amp;gt; read2List(final int pageNum, final int pageSize, final Ma">
 <meta property="og:type" content="website">
-<meta property="og:title" content="multi-thread">
+<meta property="og:title" content="多线程查询，并对结果进行合并输出">
 <meta property="og:url" content="http://yoursite.com/multi-thread/multi-thread.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="&amp;nbsp;问题大致是这样的：数据库有45条数据，决定分5线程，去查询。然后，将数据结果进行合并。 编写一个Callable方法12345678910111213private Callable&amp;lt;List&amp;lt;Map&amp;lt;String, Object&amp;gt;&amp;gt;&amp;gt; read2List(final int pageNum, final int pageSize, final Ma">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-24T08:23:07.472Z">
+<meta property="og:updated_time" content="2019-07-29T08:17:59.702Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="multi-thread">
+<meta name="twitter:title" content="多线程查询，并对结果进行合并输出">
+<meta name="twitter:description" content="&amp;nbsp;问题大致是这样的：数据库有45条数据，决定分5线程，去查询。然后，将数据结果进行合并。 编写一个Callable方法12345678910111213private Callable&amp;lt;List&amp;lt;Map&amp;lt;String, Object&amp;gt;&amp;gt;&amp;gt; read2List(final int pageNum, final int pageSize, final Ma">
 
 
 
@@ -122,7 +125,7 @@
 
 
 
-  <title>multi-thread | Hexo</title>
+  <title>多线程查询，并对结果进行合并输出 | Hexo</title>
   
 
 
@@ -302,7 +305,7 @@
     <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">multi-thread</h1>
+	<h1 class="post-title" itemprop="name headline">多线程查询，并对结果进行合并输出</h1>
 
 
 
@@ -314,7 +317,14 @@
       <div class="post-body">
         
         
-          
+          <p>&nbsp;<br>问题大致是这样的：<br>数据库有45条数据，决定分5线程，去查询。<br>然后，将数据结果进行合并。</p>
+<h2 id="编写一个Callable方法"><a href="#编写一个Callable方法" class="headerlink" title="编写一个Callable方法"></a>编写一个Callable方法</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">private Callable&lt;List&lt;Map&lt;String, Object&gt;&gt;&gt; read2List(final int pageNum, final int pageSize, final Map&lt;String, Object&gt; inParams) &#123;</span><br><span class="line">        Callable&lt;List&lt;Map&lt;String, Object&gt;&gt;&gt; callable = new Callable&lt;List&lt;Map&lt;String, Object&gt;&gt;&gt;() &#123;</span><br><span class="line">            public List&lt;Map&lt;String, Object&gt;&gt; call() throws Exception &#123;</span><br><span class="line">                Map params = new HashMap();</span><br><span class="line">                params.put(<span class="string">"start"</span>,(pageNum-1)*pageSize);</span><br><span class="line">                params.put(<span class="string">"size"</span>,pageSize);</span><br><span class="line">                List&lt;Map&lt;String, Object&gt;&gt; list = baseMapper.getUserByPage(params);</span><br><span class="line">                <span class="built_in">return</span> list;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="built_in">return</span> callable;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>这个方法相当于run方法。只是这个方法有Callable返回值，而run是没有返回值的。</p>
+<h2 id="简单的合并实现逻辑"><a href="#简单的合并实现逻辑" class="headerlink" title="简单的合并实现逻辑"></a>简单的合并实现逻辑</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"> public String <span class="function"><span class="title">test3</span></span>()&#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            StringBuffer buffer=new StringBuffer();</span><br><span class="line">            int threadNum = 5;//线程总数</span><br><span class="line">            BlockingQueue&lt;Future&lt;List&lt;Map&lt;String, Object&gt;&gt;&gt;&gt; queue = new LinkedBlockingQueue&lt;Future&lt;List&lt;Map&lt;String, Object&gt;&gt;&gt;&gt;();</span><br><span class="line">//            List&lt;Future&lt;List&lt;Map&lt;String, Object&gt;&gt;&gt;&gt; resList=new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> (int i=1;i&lt;=threadNum;i++)&#123;</span><br><span class="line">                Future&lt;List&lt;Map&lt;String, Object&gt;&gt;&gt; future=executor.submit(read2List(i,10,null));</span><br><span class="line">                queue.add(future);</span><br><span class="line">//                resList.add(future);</span><br><span class="line">            &#125;</span><br><span class="line">            int queueSize=queue.size();</span><br><span class="line">            List&lt;Map&lt;String, Object&gt;&gt; data = new ArrayList&lt;Map&lt;String, Object&gt;&gt;();</span><br><span class="line">            <span class="keyword">for</span> (int i = 0; i &lt; queueSize; i++) &#123;</span><br><span class="line">                List&lt;Map&lt;String, Object&gt;&gt; list = queue.take().get();//queue的take方法是阻塞的，获取每一个Future对象，Future的get方法也是阻塞的，会等待线程返回结果</span><br><span class="line">//                List&lt;Map&lt;String, Object&gt;&gt; list = resList.get(i).get();</span><br><span class="line">                data.addAll(list);</span><br><span class="line">            &#125;</span><br><span class="line">            String res= JSON.toJSONString(data);</span><br><span class="line">            System.out.println(res);</span><br><span class="line">            <span class="built_in">return</span> res;</span><br><span class="line"></span><br><span class="line">        &#125;catch (Exception e)&#123;</span><br><span class="line">            throw new RuntimeException(<span class="string">""</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="完整代码"><a href="#完整代码" class="headerlink" title="完整代码"></a>完整代码</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br></pre></td><td class="code"><pre><span class="line">package com.test.jqy.service.impl;</span><br><span class="line"></span><br><span class="line">import com.alibaba.fastjson.JSON;</span><br><span class="line">import com.test.jqy.repository.BaseMapper;</span><br><span class="line">import com.test.jqy.service.TestService;</span><br><span class="line">import lombok.extern.slf4j.Slf4j;</span><br><span class="line">import org.springframework.beans.factory.annotation.Autowired;</span><br><span class="line">import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;</span><br><span class="line">import org.springframework.stereotype.Service;</span><br><span class="line">import org.springframework.transaction.annotation.Transactional;</span><br><span class="line"></span><br><span class="line">import javax.annotation.Resource;</span><br><span class="line">import java.util.ArrayList;</span><br><span class="line">import java.util.HashMap;</span><br><span class="line">import java.util.List;</span><br><span class="line">import java.util.Map;</span><br><span class="line">import java.util.concurrent.BlockingQueue;</span><br><span class="line">import java.util.concurrent.Callable;</span><br><span class="line">import java.util.concurrent.Future;</span><br><span class="line">import java.util.concurrent.LinkedBlockingQueue;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * @Author: 江千月</span><br><span class="line"> * @Date: 2019/2/20 15:23</span><br><span class="line"> * @Version 1.0</span><br><span class="line"> * @Note</span><br><span class="line"> */</span><br><span class="line">@Service</span><br><span class="line">@Slf4j</span><br><span class="line">public class TestServiceImpl implements TestService&#123;</span><br><span class="line">    @Autowired</span><br><span class="line">    private BaseMapper baseMapper;</span><br><span class="line">    @Resource(name = <span class="string">"taskExecutor"</span>)</span><br><span class="line">    private ThreadPoolTaskExecutor executor;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">    @Override</span><br><span class="line">    @Transactional</span><br><span class="line">    public String <span class="function"><span class="title">test3</span></span>()&#123;</span><br><span class="line">        try&#123;</span><br><span class="line">            StringBuffer buffer=new StringBuffer();</span><br><span class="line">            int threadNum = 5;//线程总数</span><br><span class="line">            BlockingQueue&lt;Future&lt;List&lt;Map&lt;String, Object&gt;&gt;&gt;&gt; queue = new LinkedBlockingQueue&lt;Future&lt;List&lt;Map&lt;String, Object&gt;&gt;&gt;&gt;();</span><br><span class="line">//            List&lt;Future&lt;List&lt;Map&lt;String, Object&gt;&gt;&gt;&gt; resList=new ArrayList&lt;&gt;();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">for</span> (int i=1;i&lt;=threadNum;i++)&#123;</span><br><span class="line">                Future&lt;List&lt;Map&lt;String, Object&gt;&gt;&gt; future=executor.submit(read2List(i,10,null));</span><br><span class="line">                queue.add(future);</span><br><span class="line">//                resList.add(future);</span><br><span class="line">            &#125;</span><br><span class="line">            int queueSize=queue.size();</span><br><span class="line">            List&lt;Map&lt;String, Object&gt;&gt; data = new ArrayList&lt;Map&lt;String, Object&gt;&gt;();</span><br><span class="line">            <span class="keyword">for</span> (int i = 0; i &lt; queueSize; i++) &#123;</span><br><span class="line">                List&lt;Map&lt;String, Object&gt;&gt; list = queue.take().get();//queue的take方法是阻塞的，获取每一个Future对象，Future的get方法也是阻塞的，会等待线程返回结果</span><br><span class="line">//                List&lt;Map&lt;String, Object&gt;&gt; list = resList.get(i).get();</span><br><span class="line">                data.addAll(list);</span><br><span class="line">            &#125;</span><br><span class="line">            String res= JSON.toJSONString(data);</span><br><span class="line">            System.out.println(res);</span><br><span class="line">            <span class="built_in">return</span> res;</span><br><span class="line"></span><br><span class="line">        &#125;catch (Exception e)&#123;</span><br><span class="line">            throw new RuntimeException(<span class="string">""</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    private Callable&lt;List&lt;Map&lt;String, Object&gt;&gt;&gt; read2List(final int pageNum, final int pageSize, final Map&lt;String, Object&gt; inParams) &#123;</span><br><span class="line">        Callable&lt;List&lt;Map&lt;String, Object&gt;&gt;&gt; callable = new Callable&lt;List&lt;Map&lt;String, Object&gt;&gt;&gt;() &#123;</span><br><span class="line">            public List&lt;Map&lt;String, Object&gt;&gt; call() throws Exception &#123;</span><br><span class="line">                Map params = new HashMap();</span><br><span class="line">                params.put(<span class="string">"start"</span>,(pageNum-1)*pageSize);</span><br><span class="line">                params.put(<span class="string">"size"</span>,pageSize);</span><br><span class="line">                List&lt;Map&lt;String, Object&gt;&gt; list = baseMapper.getUserByPage(params);</span><br><span class="line">                <span class="built_in">return</span> list;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;;</span><br><span class="line">        <span class="built_in">return</span> callable;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>参考<br><a href="https://blog.csdn.net/u012387481/article/details/79044199" target="_blank" rel="noopener">https://blog.csdn.net/u012387481/article/details/79044199</a><br><a href="https://blog.csdn.net/hui12581/article/details/45023551" target="_blank" rel="noopener">https://blog.csdn.net/hui12581/article/details/45023551</a><br><a href="https://www.cnblogs.com/xiaxiaosheng/p/6911903.html" target="_blank" rel="noopener">https://www.cnblogs.com/xiaxiaosheng/p/6911903.html</a></p>
+<h3 id="欢迎交流"><a href="#欢迎交流" class="headerlink" title="欢迎交流"></a>欢迎交流</h3><p><strong>本人github地址</strong>  <a href="https://github.com/walkingWind" target="_blank" rel="noopener">https://github.com/walkingWind</a></p>
+
         
       </div>
       
@@ -356,8 +366,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -399,6 +418,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#编写一个Callable方法"><span class="nav-number">1.</span> <span class="nav-text">编写一个Callable方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#简单的合并实现逻辑"><span class="nav-number">2.</span> <span class="nav-text">简单的合并实现逻辑</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#完整代码"><span class="nav-number">3.</span> <span class="nav-text">完整代码</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#欢迎交流"><span class="nav-number">3.1.</span> <span class="nav-text">欢迎交流</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
