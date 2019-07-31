@@ -390,16 +390,16 @@
       
         
           
-            <p><div style="padding:20% 40%;"><br>    <div id="nr" style="white-space:pre;"><br>    </div><br></div></p>
-<script src="http://libs.baidu.com/jquery/1.7.2/jquery.min.js"></script>
+            <p><div id="haha" style="padding:20% 40%;"><br>    <div id="nr" style="white-space:pre;"><br>    </div><br></div></p>
+<p></p><p id="welcome" style="display:none;font-size:25px;font-weight:bold;text-align:center;">欢迎来到walkingWind的博客</p><p></p>
+<script src="https://libs.baidu.com/jquery/1.7.2/jquery.min.js"></script>
 <script>
 var s = '我向星辰下令\n';
 s+= '我停泊瞩望\n';
 s+= '我让自己登基\n';
 s+= '做风的君王\n';
-s+= '-----------------------\n';
-
-s+= '做风的君王\n';
+s+= '-------------------\n';
+s+= '        walkingWind\n';
 var con = $('#nr');
 var index = 0;
 var length = s.length;
@@ -415,8 +415,12 @@ function start(){
             index = 0;
             //start()
             setTimeout(function(){
-                $('div[class="panel panel-default zsnr"]').fadeOut(3000,function(){});
+                $('#nr').fadeOut(3000,function(){});
             },3000);
+            setTimeout(function(){
+                $('#haha').remove();
+                $('#welcome').fadeIn(5000);
+            },7000);
 
         }
     },200);

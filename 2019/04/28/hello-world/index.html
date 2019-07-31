@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="var s = &apos;我向星辰下令\n&apos;; s+= &apos;我停泊瞩望\n&apos;; s+= &apos;我让自己登基\n&apos;; s+= &apos;做风的君王\n&apos;; s+= &apos;-----------------------\n&apos;;  s+= &apos;做风的君王\n&apos;; var con = $(&apos;#nr&apos;); var index = 0; var length = s.length; var tId = null;">
+<meta name="description" content="欢迎来到walkingWind的博客   var s = &apos;我向星辰下令\n&apos;; s+= &apos;我停泊瞩望\n&apos;; s+= &apos;我让自己登基\n&apos;; s+= &apos;做风的君王\n&apos;; s+= &apos;-------------------\n&apos;; s+= &apos;        walkingWind\n&apos;; var con = $(&apos;#nr&apos;); var index = 0; var length">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Hello World">
 <meta property="og:url" content="http://yoursite.com/2019/04/28/hello-world/index.html">
 <meta property="og:site_name" content="Hexo">
-<meta property="og:description" content="var s = &apos;我向星辰下令\n&apos;; s+= &apos;我停泊瞩望\n&apos;; s+= &apos;我让自己登基\n&apos;; s+= &apos;做风的君王\n&apos;; s+= &apos;-----------------------\n&apos;;  s+= &apos;做风的君王\n&apos;; var con = $(&apos;#nr&apos;); var index = 0; var length = s.length; var tId = null;">
+<meta property="og:description" content="欢迎来到walkingWind的博客   var s = &apos;我向星辰下令\n&apos;; s+= &apos;我停泊瞩望\n&apos;; s+= &apos;我让自己登基\n&apos;; s+= &apos;做风的君王\n&apos;; s+= &apos;-------------------\n&apos;; s+= &apos;        walkingWind\n&apos;; var con = $(&apos;#nr&apos;); var index = 0; var length">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-31T12:11:48.937Z">
+<meta property="og:updated_time" content="2019-07-31T12:33:50.266Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Hello World">
-<meta name="twitter:description" content="var s = &apos;我向星辰下令\n&apos;; s+= &apos;我停泊瞩望\n&apos;; s+= &apos;我让自己登基\n&apos;; s+= &apos;做风的君王\n&apos;; s+= &apos;-----------------------\n&apos;;  s+= &apos;做风的君王\n&apos;; var con = $(&apos;#nr&apos;); var index = 0; var length = s.length; var tId = null;">
+<meta name="twitter:description" content="欢迎来到walkingWind的博客   var s = &apos;我向星辰下令\n&apos;; s+= &apos;我停泊瞩望\n&apos;; s+= &apos;我让自己登基\n&apos;; s+= &apos;做风的君王\n&apos;; s+= &apos;-------------------\n&apos;; s+= &apos;        walkingWind\n&apos;; var con = $(&apos;#nr&apos;); var index = 0; var length">
 
 
 
@@ -389,16 +389,16 @@
       
 
       
-        <p><div style="padding:20% 40%;"><br>    <div id="nr" style="white-space:pre;"><br>    </div><br></div></p>
-<script src="http://libs.baidu.com/jquery/1.7.2/jquery.min.js"></script>
+        <p><div id="haha" style="padding:20% 40%;"><br>    <div id="nr" style="white-space:pre;"><br>    </div><br></div></p>
+<p></p><p id="welcome" style="display:none;font-size:25px;font-weight:bold;text-align:center;">欢迎来到walkingWind的博客</p><p></p>
+<script src="https://libs.baidu.com/jquery/1.7.2/jquery.min.js"></script>
 <script>
 var s = '我向星辰下令\n';
 s+= '我停泊瞩望\n';
 s+= '我让自己登基\n';
 s+= '做风的君王\n';
-s+= '-----------------------\n';
-
-s+= '做风的君王\n';
+s+= '-------------------\n';
+s+= '        walkingWind\n';
 var con = $('#nr');
 var index = 0;
 var length = s.length;
@@ -414,8 +414,12 @@ function start(){
             index = 0;
             //start()
             setTimeout(function(){
-                $('div[class="panel panel-default zsnr"]').fadeOut(3000,function(){});
+                $('#nr').fadeOut(3000,function(){});
             },3000);
+            setTimeout(function(){
+                $('#haha').remove();
+                $('#welcome').fadeIn(5000);
+            },7000);
 
         }
     },200);
