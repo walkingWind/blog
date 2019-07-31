@@ -79,14 +79,17 @@
 
 
 
+<meta name="description" content="&amp;nbsp;oracle中存储大数据的字段叫LOB。LOB类型分为BLOB和CLOB。BLOB即二进制大型对象（Binary Large Object），适用于存贮非文本的字节流数据（如程序、图象、影音等）。而CLOB，即字符型大型对象（Character Large Object），则与字符集相关，适于存贮文本型的数据（如历史档案、大部头著作等）。 varchar2转clob习惯于mysql的同">
 <meta property="og:type" content="website">
-<meta property="og:title" content="elastic-search-java-api">
-<meta property="og:url" content="http://yoursite.com/elastic-search/elastic-search-java-api.html">
+<meta property="og:title" content="oracle中的clob类型">
+<meta property="og:url" content="http://yoursite.com/oracle/oracle-clob.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="&amp;nbsp;oracle中存储大数据的字段叫LOB。LOB类型分为BLOB和CLOB。BLOB即二进制大型对象（Binary Large Object），适用于存贮非文本的字节流数据（如程序、图象、影音等）。而CLOB，即字符型大型对象（Character Large Object），则与字符集相关，适于存贮文本型的数据（如历史档案、大部头著作等）。 varchar2转clob习惯于mysql的同">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-24T09:23:01.057Z">
+<meta property="og:updated_time" content="2019-07-31T09:51:14.077Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="elastic-search-java-api">
+<meta name="twitter:title" content="oracle中的clob类型">
+<meta name="twitter:description" content="&amp;nbsp;oracle中存储大数据的字段叫LOB。LOB类型分为BLOB和CLOB。BLOB即二进制大型对象（Binary Large Object），适用于存贮非文本的字节流数据（如程序、图象、影音等）。而CLOB，即字符型大型对象（Character Large Object），则与字符集相关，适于存贮文本型的数据（如历史档案、大部头著作等）。 varchar2转clob习惯于mysql的同">
 
 
 
@@ -116,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/elastic-search/elastic-search-java-api.html">
+  <link rel="canonical" href="http://yoursite.com/oracle/oracle-clob.html">
 
 
 
 
 
-  <title>elastic-search-java-api | Hexo</title>
+  <title>oracle中的clob类型 | Hexo</title>
   
 
 
@@ -312,7 +315,7 @@
     <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">elastic-search-java-api</h1>
+	<h1 class="post-title" itemprop="name headline">oracle中的clob类型</h1>
 
 
 
@@ -324,7 +327,12 @@
       <div class="post-body">
         
         
-          
+          <p>&nbsp;<br>oracle中存储大数据的字段叫LOB。LOB类型分为BLOB和CLOB。<br>BLOB即二进制大型对象（Binary Large Object），适用于存贮非文本的字节流数据（如程序、图象、影音等）。<br>而CLOB，即字符型大型对象（Character Large Object），则与字符集相关，适于存贮文本型的数据（如历史档案、大部头著作等）。</p>
+<h2 id="varchar2转clob"><a href="#varchar2转clob" class="headerlink" title="varchar2转clob"></a>varchar2转clob</h2><p>习惯于mysql的同学会发现，如果字符串长度不够了，随便从varchar改成text类型就行了，非常的简单方便。<br>而oracle想多存那么些字符串则非常麻烦。从varchar2直接改成clob是更改不了。你在改的过程中，可能还需要考虑原字段是否有数据的问题。<br>下面是一个通用的修改思路（<strong>不管旧列是否有数据，下面的操作都有效</strong>）。大致思路如下：<br>1.将原列名a进行更改，改为b<br>2.新建一列，命名成a，类型设置成clob<br>3.将原数据迁移到新列上<br>4.删除旧列及数据<br>5.将新列的备注写的和原列一样<br>6.提交<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">alter table TB_WITH_DATA rename column description to description_bak</span><br><span class="line">alter table TB_WITH_DATA add description clob;</span><br><span class="line">update TB_WITH_DATA <span class="built_in">set</span> description=description_bak;</span><br><span class="line">alter table TB_WITH_DATA drop column description_bak;</span><br><span class="line">Comment on column  TB_WITH_DATA.description is ‘描述’;</span><br><span class="line">commit;</span><br></pre></td></tr></table></figure></p>
+<h2 id="clob的使用注意事项"><a href="#clob的使用注意事项" class="headerlink" title="clob的使用注意事项"></a>clob的使用注意事项</h2><p>1.在mybatis对clob的查询中，其实并不需要做任何额外处理。你只要用string类型来接收数据库的clob就可以了。完全不用像某些文章写的，编写什么mybatis前置拦截器做类型转换！！！<br>2.数据库sql若有distinct去重或者group by，则clob类型字段不能使用。需要转成其他类型，比如用to_char()函数转成字符串，但是clob的字节数必须是4000字节以内，否则to_char()函数会报错。</p>
+<p>参考<br><a href="https://blog.csdn.net/jssg_tzw/article/details/40829867" target="_blank" rel="noopener">https://blog.csdn.net/jssg_tzw/article/details/40829867</a></p>
+<h5 id="欢迎交流"><a href="#欢迎交流" class="headerlink" title="欢迎交流"></a>欢迎交流</h5><p><strong>本人github地址</strong>    <a href="https://github.com/walkingWind" target="_blank" rel="noopener">https://github.com/walkingWind</a></p>
+
         
       </div>
       
@@ -366,8 +374,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -409,6 +426,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#varchar2转clob"><span class="nav-number">1.</span> <span class="nav-text">varchar2转clob</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#clob的使用注意事项"><span class="nav-number">2.</span> <span class="nav-text">clob的使用注意事项</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#欢迎交流"><span class="nav-number">2.0.0.1.</span> <span class="nav-text">欢迎交流</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

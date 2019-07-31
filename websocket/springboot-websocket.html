@@ -79,14 +79,17 @@
 
 
 
+<meta name="description" content="&amp;nbsp; 前言基于springboot的websocket服务搭建，其实有2种方式。第一种是在pom中引入比较传统的spring-boot-starter-websocket依赖。第二种是基于netty的。在pom中引入netty-websocket-spring-boot-starter依赖。前提是springboot2+网上说第二种性能更好。本人并没有做这方面的测试。本文基于第一种方式构建">
 <meta property="og:type" content="website">
-<meta property="og:title" content="springboot-websocket">
+<meta property="og:title" content="基于springboot的websocket服务搭建">
 <meta property="og:url" content="http://yoursite.com/websocket/springboot-websocket.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="&amp;nbsp; 前言基于springboot的websocket服务搭建，其实有2种方式。第一种是在pom中引入比较传统的spring-boot-starter-websocket依赖。第二种是基于netty的。在pom中引入netty-websocket-spring-boot-starter依赖。前提是springboot2+网上说第二种性能更好。本人并没有做这方面的测试。本文基于第一种方式构建">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-24T09:05:05.066Z">
+<meta property="og:updated_time" content="2019-07-31T09:24:18.935Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="springboot-websocket">
+<meta name="twitter:title" content="基于springboot的websocket服务搭建">
+<meta name="twitter:description" content="&amp;nbsp; 前言基于springboot的websocket服务搭建，其实有2种方式。第一种是在pom中引入比较传统的spring-boot-starter-websocket依赖。第二种是基于netty的。在pom中引入netty-websocket-spring-boot-starter依赖。前提是springboot2+网上说第二种性能更好。本人并没有做这方面的测试。本文基于第一种方式构建">
 
 
 
@@ -122,7 +125,7 @@
 
 
 
-  <title>springboot-websocket | Hexo</title>
+  <title>基于springboot的websocket服务搭建 | Hexo</title>
   
 
 
@@ -257,6 +260,16 @@
         </li>
       
         
+        <li class="menu-item menu-item-oracle">
+          <a href="/blog/oracle/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-apple"></i> <br>
+            
+            oracle
+          </a>
+        </li>
+      
+        
         <li class="menu-item menu-item-about">
           <a href="/blog/about/" rel="section">
             
@@ -302,7 +315,7 @@
     <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">springboot-websocket</h1>
+	<h1 class="post-title" itemprop="name headline">基于springboot的websocket服务搭建</h1>
 
 
 
@@ -314,7 +327,17 @@
       <div class="post-body">
         
         
-          
+          <p>&nbsp;</p>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>基于springboot的websocket服务搭建，其实有2种方式。<br>第一种是在pom中引入比较传统的spring-boot-starter-websocket依赖。<br>第二种是基于netty的。在pom中引入netty-websocket-spring-boot-starter依赖。前提是springboot2+<br>网上说第二种性能更好。本人并没有做这方面的测试。本文基于第一种方式构建。</p>
+<h2 id="在pom中引入"><a href="#在pom中引入" class="headerlink" title="在pom中引入"></a>在pom中引入</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&lt;dependency&gt;</span><br><span class="line">    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">    &lt;artifactId&gt;spring-boot-starter-websocket&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="编写WebSocketConfig-java类"><a href="#编写WebSocketConfig-java类" class="headerlink" title="编写WebSocketConfig.java类"></a>编写WebSocketConfig.java类</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">@Configuration</span><br><span class="line">@EnableWebSocketMessageBroker</span><br><span class="line">public class WebSocketConfig implements WebSocketMessageBrokerConfigurer &#123;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 这个方法指定了创建连接的协议端点</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public void registerStompEndpoints(StompEndpointRegistry registry) &#123;</span><br><span class="line">       </span><br><span class="line">        registry.addEndpoint(<span class="string">"/websocket-simple"</span>)</span><br><span class="line">                .setAllowedOrigins(<span class="string">"*"</span>)</span><br><span class="line">                .withSockJS();</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 这个方法指定了一些发送消息和接收消息的路径</span><br><span class="line">     */</span><br><span class="line">    @Override</span><br><span class="line">    public void configureMessageBroker(MessageBrokerRegistry registry) &#123;</span><br><span class="line">        registry.enableSimpleBroker(<span class="string">"/topic"</span>, <span class="string">"/queue"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">	......</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于引入的websocket包版本不同，可能出现方法过时的问题。本文是基于springboot2.1.5的，实现WebSocketMessageBrokerConfigurer刚好不过期。</p>
+<h2 id="基于注解的接受消息和返回消息"><a href="#基于注解的接受消息和返回消息" class="headerlink" title="基于注解的接受消息和返回消息"></a>基于注解的接受消息和返回消息</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">@MessageMapping(<span class="string">"/receive"</span>) //接受客户端的信息的路径，类似@RequestMapping</span><br><span class="line">    @SendTo(<span class="string">"/topic/getResponse"</span>) //应答客户端信息的路径，需要客户端监听</span><br><span class="line">//    @SendToUser(<span class="string">"/topic/getResponse"</span>) </span><br><span class="line">    public JSONObject broadcast(String requestMessage) &#123;</span><br><span class="line">        log.info(<span class="string">"receive message = &#123;&#125;"</span>, requestMessage);</span><br><span class="line">        log.info(<span class="string">"count is &#123;&#125;"</span>, count.incrementAndGet());</span><br><span class="line">        JSONObject res = new JSONObject();</span><br><span class="line">        res.put(<span class="string">"data"</span>, <span class="string">"message is get "</span> + requestMessage);</span><br><span class="line">        <span class="built_in">return</span> res;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>这个方法其实就是实现了，接手到客户端消息后，服务的马上进行应答。<br>@SendTo是对应答客户端信息的广播<br>@SendToUser则是对应答客户端信息的独播</p>
+<p>完整代码参考<br><a href="https://github.com/walkingWind/web-socket-server-test" target="_blank" rel="noopener">https://github.com/walkingWind/web-socket-server-test</a></p>
+<p>参考<br><a href="https://www.jianshu.com/p/9103c9c7e128" target="_blank" rel="noopener">https://www.jianshu.com/p/9103c9c7e128</a><br><a href="https://www.jianshu.com/p/60799f1356c5" target="_blank" rel="noopener">https://www.jianshu.com/p/60799f1356c5</a><br><a href="https://juejin.im/post/5ac8cd5c6fb9a028dd4e7ba6#heading-18" target="_blank" rel="noopener">https://juejin.im/post/5ac8cd5c6fb9a028dd4e7ba6#heading-18</a></p>
+<h5 id="欢迎交流"><a href="#欢迎交流" class="headerlink" title="欢迎交流"></a>欢迎交流</h5><p><strong>本人github地址</strong>    <a href="https://github.com/walkingWind" target="_blank" rel="noopener">https://github.com/walkingWind</a></p>
+
         
       </div>
       
@@ -356,8 +379,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -399,6 +431,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#在pom中引入"><span class="nav-number">2.</span> <span class="nav-text">在pom中引入</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#编写WebSocketConfig-java类"><span class="nav-number">3.</span> <span class="nav-text">编写WebSocketConfig.java类</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基于注解的接受消息和返回消息"><span class="nav-number">4.</span> <span class="nav-text">基于注解的接受消息和返回消息</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#欢迎交流"><span class="nav-number">4.0.0.1.</span> <span class="nav-text">欢迎交流</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
