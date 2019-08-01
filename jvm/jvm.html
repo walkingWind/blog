@@ -79,14 +79,17 @@
 
 
 
+<meta name="description" content="1.使用top命令查看cpu占用情况。默认按cpu使用率排序 命令  topwindows 命令 pslist或 tasklist 列出所有进程 2.确定线程查看pid为6624的进程下的线程占用情况。发现6634和6635线程几乎占用了大部分的cpu。 命令  top -Hp 6624windows可以用 pslist -dmx pid号  查看某一进程下所有线程 3.将线程pid转为16进制因">
 <meta property="og:type" content="website">
-<meta property="og:title" content="jvm">
+<meta property="og:title" content="jvm调优基础">
 <meta property="og:url" content="http://yoursite.com/jvm/jvm.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="1.使用top命令查看cpu占用情况。默认按cpu使用率排序 命令  topwindows 命令 pslist或 tasklist 列出所有进程 2.确定线程查看pid为6624的进程下的线程占用情况。发现6634和6635线程几乎占用了大部分的cpu。 命令  top -Hp 6624windows可以用 pslist -dmx pid号  查看某一进程下所有线程 3.将线程pid转为16进制因">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-24T08:23:34.441Z">
+<meta property="og:updated_time" content="2019-08-01T09:18:38.922Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="jvm">
+<meta name="twitter:title" content="jvm调优基础">
+<meta name="twitter:description" content="1.使用top命令查看cpu占用情况。默认按cpu使用率排序 命令  topwindows 命令 pslist或 tasklist 列出所有进程 2.确定线程查看pid为6624的进程下的线程占用情况。发现6634和6635线程几乎占用了大部分的cpu。 命令  top -Hp 6624windows可以用 pslist -dmx pid号  查看某一进程下所有线程 3.将线程pid转为16进制因">
 
 
 
@@ -122,7 +125,7 @@
 
 
 
-  <title>jvm | Hexo</title>
+  <title>jvm调优基础 | Hexo</title>
   
 
 
@@ -322,7 +325,7 @@
     <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">jvm</h1>
+	<h1 class="post-title" itemprop="name headline">jvm调优基础</h1>
 
 
 
@@ -334,7 +337,29 @@
       <div class="post-body">
         
         
-          
+          <p>1.使用top命令查看cpu占用情况。默认按cpu使用率排序</p>
+<p>命令  top<br>windows 命令 pslist或 tasklist 列出所有进程</p>
+<p>2.确定线程<br>查看pid为6624的进程下的线程占用情况。发现6634和6635线程几乎占用了大部分的cpu。</p>
+<p>命令  top -Hp 6624<br>windows可以用 pslist -dmx pid号  查看某一进程下所有线程</p>
+<p>3.将线程pid转为16进制<br>因为thread id在栈信息中是以十六进制的形式显示的，所以可以使用printf “%x \n” [pid]命令将线程pid转为16进制。<br>将上面的6634和6635转换成十六进制为19ea，19eb。</p>
+<p>命令  printf “%x \n” 6634</p>
+<p>4.接下来jstack就要上场了。使用jstack -l [pid]查看线程的堆栈信息。</p>
+<p>命令  jstack -l  [pid]  //进程id，这时候列出了该进程下所有的线程情况，可用5进行筛选</p>
+<p>5.过滤19ea线程的堆栈信息，可以使用jstack -l <pid> | grep <thread-hex-id> -A 10。-A 10 参数用来指定显示行数，否则只会显示一行信息。</thread-hex-id></pid></p>
+<p>命令  jstack -l 6624 | grep 19ea -A 10</p>
+<p>至此，可以确定到具体的java代码行数</p>
+<p>jstack Dump 日志文件中的线程状态</p>
+<p>1：dump 文件里，值得关注的线程状态有</p>
+<p>死锁， Deadlock（重点关注） </p>
+<p>执行中，Runnable   </p>
+<p>等待资源， Waiting on condition（重点关注） </p>
+<p>等待获取监视器， Waiting on monitor entry（重点关注）</p>
+<p>暂停，Suspended</p>
+<p>对象等待中，Object.wait() 或 TIMED_WAITING</p>
+<p>阻塞， Blocked（重点关注）  </p>
+<p>停止，Parked</p>
+<h5 id="欢迎交流"><a href="#欢迎交流" class="headerlink" title="欢迎交流"></a>欢迎交流</h5><p><strong>本人github地址</strong>    <a href="https://github.com/walkingWind" target="_blank" rel="noopener">https://github.com/walkingWind</a></p>
+
         
       </div>
       
@@ -376,8 +401,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -419,6 +453,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#欢迎交流"><span class="nav-number">1.</span> <span class="nav-text">欢迎交流</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       

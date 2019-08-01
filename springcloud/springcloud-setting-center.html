@@ -79,14 +79,19 @@
 
 
 
+<meta name="description" content="springcloud配置中心的大致加载运作流程1.在配置中心搭建之初，需要一个远程仓库，可以是svn或者git。需要自行将配置上传到远程仓库。2.配置中心服务在启动之初，会从远程仓库拉取配置。3.各个客户端服务，再从配置中心服务这，拉取自己需要的配置。4.application.yml和bootstrap.yml是加载各服务本地的。其他的，都是线上远程库的配置。  配置中心服务端搭建（以远程sv">
 <meta property="og:type" content="website">
-<meta property="og:title" content="springcloud-setting-center">
+<meta property="og:title" content="springcloud配置中心">
 <meta property="og:url" content="http://yoursite.com/springcloud/springcloud-setting-center.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="springcloud配置中心的大致加载运作流程1.在配置中心搭建之初，需要一个远程仓库，可以是svn或者git。需要自行将配置上传到远程仓库。2.配置中心服务在启动之初，会从远程仓库拉取配置。3.各个客户端服务，再从配置中心服务这，拉取自己需要的配置。4.application.yml和bootstrap.yml是加载各服务本地的。其他的，都是线上远程库的配置。  配置中心服务端搭建（以远程sv">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-07-24T09:02:31.740Z">
+<meta property="og:image" content="http://yoursite.com/setting-center.png">
+<meta property="og:updated_time" content="2019-08-01T07:34:15.724Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="springcloud-setting-center">
+<meta name="twitter:title" content="springcloud配置中心">
+<meta name="twitter:description" content="springcloud配置中心的大致加载运作流程1.在配置中心搭建之初，需要一个远程仓库，可以是svn或者git。需要自行将配置上传到远程仓库。2.配置中心服务在启动之初，会从远程仓库拉取配置。3.各个客户端服务，再从配置中心服务这，拉取自己需要的配置。4.application.yml和bootstrap.yml是加载各服务本地的。其他的，都是线上远程库的配置。  配置中心服务端搭建（以远程sv">
+<meta name="twitter:image" content="http://yoursite.com/setting-center.png">
 
 
 
@@ -122,7 +127,7 @@
 
 
 
-  <title>springcloud-setting-center | Hexo</title>
+  <title>springcloud配置中心 | Hexo</title>
   
 
 
@@ -322,7 +327,7 @@
     <div class="post-block page">
       <header class="post-header">
 
-	<h1 class="post-title" itemprop="name headline">springcloud-setting-center</h1>
+	<h1 class="post-title" itemprop="name headline">springcloud配置中心</h1>
 
 
 
@@ -334,7 +339,17 @@
       <div class="post-body">
         
         
-          
+          <h2 id="springcloud配置中心的大致加载运作流程"><a href="#springcloud配置中心的大致加载运作流程" class="headerlink" title="springcloud配置中心的大致加载运作流程"></a>springcloud配置中心的大致加载运作流程</h2><p>1.在配置中心搭建之初，需要一个远程仓库，可以是svn或者git。需要自行将配置上传到远程仓库。<br>2.配置中心服务在启动之初，会从远程仓库拉取配置。<br>3.各个客户端服务，再从配置中心服务这，拉取自己需要的配置。<br>4.application.yml和bootstrap.yml是加载各服务本地的。其他的，都是线上远程库的配置。</p>
+<p><img src="/setting-center.png" alt="avatar"></p>
+<h2 id="配置中心服务端搭建（以远程svn为例）"><a href="#配置中心服务端搭建（以远程svn为例）" class="headerlink" title="配置中心服务端搭建（以远程svn为例）"></a>配置中心服务端搭建（以远程svn为例）</h2><h3 id="pom-xml"><a href="#pom-xml" class="headerlink" title="pom.xml"></a>pom.xml</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--Spring Cloud Config 服务端依赖--&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;spring-cloud-config-server&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="新建bootstrap-yml"><a href="#新建bootstrap-yml" class="headerlink" title="新建bootstrap.yml"></a>新建bootstrap.yml</h3><p>这个文件和application.yml的区别就是，bootstrap.yml先于application.yml加载。这个的前提是springcloud项目，springboot并不支持bootstrap.yml。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">......</span><br><span class="line"></span><br><span class="line">spring:</span><br><span class="line">  cloud:</span><br><span class="line">    config:</span><br><span class="line">      server:</span><br><span class="line">        svn:</span><br><span class="line">          uri: http://192.168.0.1/svn/repo/config-repo</span><br><span class="line">          username: username</span><br><span class="line">          password: password</span><br><span class="line">        default-label: config  <span class="comment">#与客户端获取时的名称对应，对svn而言，实际就是http://192.168.0.1/svn/repo/config-repo下的一个文件夹叫config</span></span><br><span class="line">		</span><br><span class="line">  profiles:</span><br><span class="line">    active: subversion  <span class="comment">#git的话好像不用写这个。当想从远程svn切本地时，参数值写成native</span></span><br><span class="line">	</span><br><span class="line">management:</span><br><span class="line">  security:</span><br><span class="line">    enabled: <span class="literal">false</span>     <span class="comment">#SpringBoot 1.5.X 以上默认开通了安全认证，如果不关闭会要求权限</span></span><br><span class="line">......</span><br></pre></td></tr></table></figure></p>
+<h3 id="启动类上加一个注解"><a href="#启动类上加一个注解" class="headerlink" title="启动类上加一个注解"></a>启动类上加一个注解</h3><p>@EnableConfigServer</p>
+<h2 id="客户端获取服务端配置流程"><a href="#客户端获取服务端配置流程" class="headerlink" title="客户端获取服务端配置流程"></a>客户端获取服务端配置流程</h2><h3 id="pom-xml-1"><a href="#pom-xml-1" class="headerlink" title="pom.xml"></a>pom.xml</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--Spring Cloud Config 客户端依赖--&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;spring-cloud-starter-config&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;!-- web的依赖，必须加 --&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;spring-boot-starter-web&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br><span class="line">&lt;!--Spring Boot Actuator，感应服务端变化--&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;spring-boot-starter-actuator&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="新建bootstrap-yml-1"><a href="#新建bootstrap-yml-1" class="headerlink" title="新建bootstrap.yml"></a>新建bootstrap.yml</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">......</span><br><span class="line"></span><br><span class="line">spring:</span><br><span class="line">    cloud:</span><br><span class="line">        config:</span><br><span class="line">            discovery:</span><br><span class="line">                enables: <span class="literal">true</span></span><br><span class="line">                service-id: zctest-config-server   <span class="comment">#这个是配置中心的服务名</span></span><br><span class="line">            label: config		<span class="comment">#这里对应配置中心里的label配置的值</span></span><br><span class="line">            name: zctest   <span class="comment">#比如要读取的配置文件为zctest-message.yml,这个指的是前缀。</span></span><br><span class="line">            profile: default,message,ds,mq  <span class="comment">#比如要读取的配置文件为zctest-message.yml,这个指的是后缀。default比较特殊，指的是zctest.yml，这个文件没有后缀。</span></span><br><span class="line">	</span><br><span class="line">management:</span><br><span class="line">  security:</span><br><span class="line">    enabled: <span class="literal">false</span>     <span class="comment">#SpringBoot 1.5.X 以上默认开通了安全认证，如果不关闭会要求权限</span></span><br><span class="line">......</span><br></pre></td></tr></table></figure>
+<h3 id="开启实时刷新配置功能"><a href="#开启实时刷新配置功能" class="headerlink" title="开启实时刷新配置功能"></a>开启实时刷新配置功能</h3><p>@RefreshScope，这个注解类似于@Controller，就是每个需要动态刷新的bean上都要写。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">import org.springframework.beans.factory.annotation.Value;</span><br><span class="line">import org.springframework.cloud.context.config.annotation.RefreshScope;</span><br><span class="line">import org.springframework.web.bind.annotation.GetMapping;</span><br><span class="line">import org.springframework.web.bind.annotation.RequestMapping;</span><br><span class="line">import org.springframework.web.bind.annotation.ResponseBody;</span><br><span class="line">import org.springframework.web.bind.annotation.RestController;</span><br><span class="line"></span><br><span class="line">/**</span><br><span class="line"> * 当有请求/fresh节点的时候，会重新请求一次ConfigServer去拉取最新的配置文件</span><br><span class="line"> * 请求/fresh需要有几点要求：1.加actuator的依赖 2.SpringCloud1.5以上需要设置 management.security.enabled=<span class="literal">false</span></span><br><span class="line"> * 这个Controller的作用是查看from这个key的值</span><br><span class="line"> */</span><br><span class="line">@RestController</span><br><span class="line">@RefreshScope //开启更新功能</span><br><span class="line">@RequestMapping(<span class="string">"api"</span>)</span><br><span class="line">public class TestController &#123;</span><br><span class="line"></span><br><span class="line">    @Value(<span class="string">"<span class="variable">$&#123;from&#125;</span>"</span>)</span><br><span class="line">    private String fromValue;</span><br><span class="line"></span><br><span class="line">    /**</span><br><span class="line">     * 返回配置文件中的值</span><br><span class="line">     */</span><br><span class="line">    @GetMapping(<span class="string">"/from"</span>)</span><br><span class="line">    @ResponseBody</span><br><span class="line">    public String <span class="function"><span class="title">returnFormValue</span></span>()&#123;</span><br><span class="line">        <span class="built_in">return</span> fromValue;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>参考<br><a href="https://www.cnblogs.com/hellxz/p/9306507.html" target="_blank" rel="noopener">https://www.cnblogs.com/hellxz/p/9306507.html</a><br><a href="https://blog.csdn.net/u010176542/article/details/80211947" target="_blank" rel="noopener">https://blog.csdn.net/u010176542/article/details/80211947</a></p>
+<h5 id="欢迎交流"><a href="#欢迎交流" class="headerlink" title="欢迎交流"></a>欢迎交流</h5><p><strong>本人github地址</strong>    <a href="https://github.com/walkingWind" target="_blank" rel="noopener">https://github.com/walkingWind</a></p>
+
         
       </div>
       
@@ -376,8 +391,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -419,6 +443,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#springcloud配置中心的大致加载运作流程"><span class="nav-number">1.</span> <span class="nav-text">springcloud配置中心的大致加载运作流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#配置中心服务端搭建（以远程svn为例）"><span class="nav-number">2.</span> <span class="nav-text">配置中心服务端搭建（以远程svn为例）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pom-xml"><span class="nav-number">2.1.</span> <span class="nav-text">pom.xml</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新建bootstrap-yml"><span class="nav-number">2.2.</span> <span class="nav-text">新建bootstrap.yml</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#启动类上加一个注解"><span class="nav-number">2.3.</span> <span class="nav-text">启动类上加一个注解</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#客户端获取服务端配置流程"><span class="nav-number">3.</span> <span class="nav-text">客户端获取服务端配置流程</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#pom-xml-1"><span class="nav-number">3.1.</span> <span class="nav-text">pom.xml</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#新建bootstrap-yml-1"><span class="nav-number">3.2.</span> <span class="nav-text">新建bootstrap.yml</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#开启实时刷新配置功能"><span class="nav-number">3.3.</span> <span class="nav-text">开启实时刷新配置功能</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#欢迎交流"><span class="nav-number">3.3.0.1.</span> <span class="nav-text">欢迎交流</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
