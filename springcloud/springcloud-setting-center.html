@@ -86,12 +86,12 @@
 <meta property="og:site_name" content="Hexo">
 <meta property="og:description" content="springcloud配置中心的大致加载运作流程1.在配置中心搭建之初，需要一个远程仓库，可以是svn或者git。需要自行将配置上传到远程仓库。2.配置中心服务在启动之初，会从远程仓库拉取配置。3.各个客户端服务，再从配置中心服务这，拉取自己需要的配置。4.application.yml和bootstrap.yml是加载各服务本地的。其他的，都是线上远程库的配置。  配置中心服务端搭建（以远程sv">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/setting-center.png">
-<meta property="og:updated_time" content="2019-08-01T07:34:15.724Z">
+<meta property="og:image" content="http://yoursite.com/springcloud/setting-center.png">
+<meta property="og:updated_time" content="2019-08-01T09:24:17.666Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="springcloud配置中心">
 <meta name="twitter:description" content="springcloud配置中心的大致加载运作流程1.在配置中心搭建之初，需要一个远程仓库，可以是svn或者git。需要自行将配置上传到远程仓库。2.配置中心服务在启动之初，会从远程仓库拉取配置。3.各个客户端服务，再从配置中心服务这，拉取自己需要的配置。4.application.yml和bootstrap.yml是加载各服务本地的。其他的，都是线上远程库的配置。  配置中心服务端搭建（以远程sv">
-<meta name="twitter:image" content="http://yoursite.com/setting-center.png">
+<meta name="twitter:image" content="http://yoursite.com/springcloud/setting-center.png">
 
 
 
@@ -340,7 +340,7 @@
         
         
           <h2 id="springcloud配置中心的大致加载运作流程"><a href="#springcloud配置中心的大致加载运作流程" class="headerlink" title="springcloud配置中心的大致加载运作流程"></a>springcloud配置中心的大致加载运作流程</h2><p>1.在配置中心搭建之初，需要一个远程仓库，可以是svn或者git。需要自行将配置上传到远程仓库。<br>2.配置中心服务在启动之初，会从远程仓库拉取配置。<br>3.各个客户端服务，再从配置中心服务这，拉取自己需要的配置。<br>4.application.yml和bootstrap.yml是加载各服务本地的。其他的，都是线上远程库的配置。</p>
-<p><img src="/setting-center.png" alt="avatar"></p>
+<p><img src="./setting-center.png" alt="avatar"></p>
 <h2 id="配置中心服务端搭建（以远程svn为例）"><a href="#配置中心服务端搭建（以远程svn为例）" class="headerlink" title="配置中心服务端搭建（以远程svn为例）"></a>配置中心服务端搭建（以远程svn为例）</h2><h3 id="pom-xml"><a href="#pom-xml" class="headerlink" title="pom.xml"></a>pom.xml</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--Spring Cloud Config 服务端依赖--&gt;</span><br><span class="line">&lt;dependency&gt;</span><br><span class="line">	&lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;</span><br><span class="line">	&lt;artifactId&gt;spring-cloud-config-server&lt;/artifactId&gt;</span><br><span class="line">&lt;/dependency&gt;</span><br></pre></td></tr></table></figure>
 <h3 id="新建bootstrap-yml"><a href="#新建bootstrap-yml" class="headerlink" title="新建bootstrap.yml"></a>新建bootstrap.yml</h3><p>这个文件和application.yml的区别就是，bootstrap.yml先于application.yml加载。这个的前提是springcloud项目，springboot并不支持bootstrap.yml。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">......</span><br><span class="line"></span><br><span class="line">spring:</span><br><span class="line">  cloud:</span><br><span class="line">    config:</span><br><span class="line">      server:</span><br><span class="line">        svn:</span><br><span class="line">          uri: http://192.168.0.1/svn/repo/config-repo</span><br><span class="line">          username: username</span><br><span class="line">          password: password</span><br><span class="line">        default-label: config  <span class="comment">#与客户端获取时的名称对应，对svn而言，实际就是http://192.168.0.1/svn/repo/config-repo下的一个文件夹叫config</span></span><br><span class="line">		</span><br><span class="line">  profiles:</span><br><span class="line">    active: subversion  <span class="comment">#git的话好像不用写这个。当想从远程svn切本地时，参数值写成native</span></span><br><span class="line">	</span><br><span class="line">management:</span><br><span class="line">  security:</span><br><span class="line">    enabled: <span class="literal">false</span>     <span class="comment">#SpringBoot 1.5.X 以上默认开通了安全认证，如果不关闭会要求权限</span></span><br><span class="line">......</span><br></pre></td></tr></table></figure></p>
 <h3 id="启动类上加一个注解"><a href="#启动类上加一个注解" class="headerlink" title="启动类上加一个注解"></a>启动类上加一个注解</h3><p>@EnableConfigServer</p>
