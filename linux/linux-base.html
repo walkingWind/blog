@@ -79,14 +79,17 @@
 
 
 
+<meta name="description" content="查看linux版本1cat /etc/xxx-release XX为发行版名称。如 centos-release 查看linux内核版本1cat /proc/version 查看端口占用情况1netstat -tunlp|grep 8116(端口号) 查找某个文件1find / -name my.cnf 查看文件内容1cat /var/log/mysqld.log 删除某个文件夹及下面所有文件1r">
 <meta property="og:type" content="website">
 <meta property="og:title" content="linux常用命令">
 <meta property="og:url" content="http://yoursite.com/linux/linux-base.html">
 <meta property="og:site_name" content="Hexo">
+<meta property="og:description" content="查看linux版本1cat /etc/xxx-release XX为发行版名称。如 centos-release 查看linux内核版本1cat /proc/version 查看端口占用情况1netstat -tunlp|grep 8116(端口号) 查找某个文件1find / -name my.cnf 查看文件内容1cat /var/log/mysqld.log 删除某个文件夹及下面所有文件1r">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-08-01T03:16:54.600Z">
+<meta property="og:updated_time" content="2019-08-01T04:07:03.454Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="linux常用命令">
+<meta name="twitter:description" content="查看linux版本1cat /etc/xxx-release XX为发行版名称。如 centos-release 查看linux内核版本1cat /proc/version 查看端口占用情况1netstat -tunlp|grep 8116(端口号) 查找某个文件1find / -name my.cnf 查看文件内容1cat /var/log/mysqld.log 删除某个文件夹及下面所有文件1r">
 
 
 
@@ -334,7 +337,27 @@
       <div class="post-body">
         
         
-          
+          <h5 id="查看linux版本"><a href="#查看linux版本" class="headerlink" title="查看linux版本"></a>查看linux版本</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /etc/xxx-release</span><br></pre></td></tr></table></figure>
+<p>XX为发行版名称。如 centos-release</p>
+<h5 id="查看linux内核版本"><a href="#查看linux内核版本" class="headerlink" title="查看linux内核版本"></a>查看linux内核版本</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /proc/version</span><br></pre></td></tr></table></figure>
+<h5 id="查看端口占用情况"><a href="#查看端口占用情况" class="headerlink" title="查看端口占用情况"></a>查看端口占用情况</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">netstat -tunlp|grep 8116(端口号)</span><br></pre></td></tr></table></figure>
+<h5 id="查找某个文件"><a href="#查找某个文件" class="headerlink" title="查找某个文件"></a>查找某个文件</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">find / -name my.cnf</span><br></pre></td></tr></table></figure>
+<h5 id="查看文件内容"><a href="#查看文件内容" class="headerlink" title="查看文件内容"></a>查看文件内容</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">cat /var/<span class="built_in">log</span>/mysqld.log</span><br></pre></td></tr></table></figure>
+<h5 id="删除某个文件夹及下面所有文件"><a href="#删除某个文件夹及下面所有文件" class="headerlink" title="删除某个文件夹及下面所有文件"></a>删除某个文件夹及下面所有文件</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm -rf 文件路径</span><br></pre></td></tr></table></figure>
+<h5 id="创建文件夹"><a href="#创建文件夹" class="headerlink" title="创建文件夹"></a>创建文件夹</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir 文件夹名</span><br></pre></td></tr></table></figure>
+<h5 id="创建文件"><a href="#创建文件" class="headerlink" title="创建文件"></a>创建文件</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">touch 文件名</span><br></pre></td></tr></table></figure>
+<h5 id="重命名文件（将文件1改名为文件2）"><a href="#重命名文件（将文件1改名为文件2）" class="headerlink" title="重命名文件（将文件1改名为文件2）"></a>重命名文件（将文件1改名为文件2）</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv 文件名1 文件名2</span><br></pre></td></tr></table></figure>
+<h5 id="移动文件"><a href="#移动文件" class="headerlink" title="移动文件"></a>移动文件</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mv 源文件或目录  目标文件或目录</span><br></pre></td></tr></table></figure>
+<h5 id="复制文件"><a href="#复制文件" class="headerlink" title="复制文件"></a>复制文件</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">cp 源文件或目录  目标文件或目录</span><br><span class="line"></span><br><span class="line">cp（copy的简写） -r（应该是递归循环） 想要复制的文件夹及其下子文和文件夹   目标位置</span><br><span class="line">cp -r /TEST/test1/* /TEST/test2</span><br></pre></td></tr></table></figure>
+<h5 id="不解压的情况下，打开压缩包"><a href="#不解压的情况下，打开压缩包" class="headerlink" title="不解压的情况下，打开压缩包"></a>不解压的情况下，打开压缩包</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">不解压的情况下，打开压缩包</span><br><span class="line">tar tf 压缩文件</span><br><span class="line">不解压的情况下，打开压缩包（可以查看，但是修改内容后，保存略麻烦）</span><br><span class="line">vi xxx.jar</span><br></pre></td></tr></table></figure>
+<h5 id="文本编辑vi相关命令"><a href="#文本编辑vi相关命令" class="headerlink" title="文本编辑vi相关命令"></a>文本编辑vi相关命令</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">1.打开某个位置的文件</span><br><span class="line">vi /etc/profile</span><br><span class="line"></span><br><span class="line">按a或i进入编辑模式</span><br><span class="line"></span><br><span class="line">命令模式下（也就是按了esc按键的模式下）</span><br><span class="line">按u是撤销</span><br><span class="line">按ctrl+R是前进</span><br><span class="line"></span><br><span class="line">:wq：在命令模式下，执行存盘退出操作；</span><br><span class="line">:w：在命令模式下，执行存盘操作；</span><br><span class="line">:w！：在命令模式下，执行强制存盘操作；</span><br><span class="line">:q：在命令模式下，执行退出vi操作；</span><br><span class="line">:q！：在命令模式下，执行强制退出vi操作；</span><br></pre></td></tr></table></figure>
+<h5 id="打包与压缩相关命令"><a href="#打包与压缩相关命令" class="headerlink" title="打包与压缩相关命令"></a>打包与压缩相关命令</h5><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line">tar</span><br><span class="line">-c: 建立压缩档案</span><br><span class="line">-x：解压</span><br><span class="line">-t：查看内容</span><br><span class="line">-r：向压缩归档文件末尾追加文件</span><br><span class="line">-u：更新原压缩包中的文件</span><br><span class="line">这五个是独立的命令，压缩解压都要用到其中一个，可以和别的命令连用但只能用其中一个。下面的参数是根据需要在压缩或解压档案时可选的。</span><br><span class="line"></span><br><span class="line">-z：有gzip属性的</span><br><span class="line">-j：有bz2属性的</span><br><span class="line">-Z：有compress属性的</span><br><span class="line">-v：显示所有过程</span><br><span class="line">-O：将文件解开到标准输出</span><br><span class="line">下面的参数-f是必须的</span><br><span class="line">-f: 使用档案名字，切记，这个参数是最后一个参数，后面只能接档案名。</span><br><span class="line"></span><br><span class="line">压缩</span><br><span class="line">tar -cvf jpg.tar *.jpg //将目录里所有jpg文件打包成tar.jpg </span><br><span class="line">tar -czf jpg.tar.gz *.jpg   //将目录里所有jpg文件打包成jpg.tar后，并且将其用gzip压缩，生成一个gzip压缩过的包，命名为jpg.tar.gz</span><br><span class="line"> tar -cjf jpg.tar.bz2 *.jpg //将目录里所有jpg文件打包成jpg.tar后，并且将其用bzip2压缩，生成一个bzip2压缩过的包，命名为jpg.tar.bz2</span><br><span class="line">tar -cZf jpg.tar.Z *.jpg   //将目录里所有jpg文件打包成jpg.tar后，并且将其用compress压缩，生成一个umcompress压缩过的包，命名为jpg.tar.Z</span><br><span class="line">rar a jpg.rar *.jpg //rar格式的压缩，需要先下载rar <span class="keyword">for</span> linux</span><br><span class="line">zip jpg.zip *.jpg //zip格式的压缩，需要先下载zip <span class="keyword">for</span> linux</span><br><span class="line"></span><br><span class="line">解压</span><br><span class="line">tar -xvf file.tar //解压 tar包</span><br><span class="line">tar -xzvf file.tar.gz //解压tar.gz</span><br><span class="line">tar -xjvf file.tar.bz2   //解压 tar.bz2</span><br><span class="line">tar -xZvf file.tar.Z   //解压tar.Z</span><br><span class="line">unrar e file.rar //解压rar</span><br><span class="line">unzip file.zip //解压zip</span><br><span class="line"></span><br><span class="line">总结</span><br><span class="line">1、*.tar 用 tar -xvf 解压</span><br><span class="line">2、*.gz 用 gzip -d或者gunzip 解压</span><br><span class="line">3、*.tar.gz和*.tgz 用 tar -xzf 解压</span><br><span class="line">4、*.bz2 用 bzip2 -d或者用bunzip2 解压</span><br><span class="line">5、*.tar.bz2用tar -xjf 解压</span><br><span class="line">6、*.Z 用 uncompress 解压</span><br><span class="line">7、*.tar.Z 用tar -xZf 解压</span><br><span class="line">8、*.rar 用 unrar e解压</span><br><span class="line">9、*.zip 用 unzip 解压</span><br></pre></td></tr></table></figure>
+<h2 id="一些其他的问题"><a href="#一些其他的问题" class="headerlink" title="一些其他的问题"></a>一些其他的问题</h2><h5 id="为什么要在linux命令前加上"><a href="#为什么要在linux命令前加上" class="headerlink" title="为什么要在linux命令前加上 ./"></a>为什么要在linux命令前加上 ./</h5><p>unix或linux中除了path系统变量外的目录下的命令都要加./<br>修改用户的 .bash_profile 在 PATH一行最后加上 “:.” (一个冒号,一个点)<br>然后退出重新登陆用户就ok了!</p>
+<h5 id="【Linux】-获取root权限命令"><a href="#【Linux】-获取root权限命令" class="headerlink" title="【Linux】- 获取root权限命令"></a>【Linux】- 获取root权限命令</h5><p>1:Redhat系统或者Fedora或者CentOs的Linux发行版,那么在Linux终端输入命令回车:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">su - root</span><br></pre></td></tr></table></figure></p>
+<p>这样就可以切换到root权限了</p>
+<p>2:Ubuntu系统,在Linux终端输入命令回车:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo su - root</span><br></pre></td></tr></table></figure></p>
+<p>然后这样也可以切换到root权限了.</p>
+
         
       </div>
       
@@ -376,8 +399,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -419,6 +451,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#查看linux版本"><span class="nav-number">1.</span> <span class="nav-text">查看linux版本</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#查看linux内核版本"><span class="nav-number">2.</span> <span class="nav-text">查看linux内核版本</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#查看端口占用情况"><span class="nav-number">3.</span> <span class="nav-text">查看端口占用情况</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#查找某个文件"><span class="nav-number">4.</span> <span class="nav-text">查找某个文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#查看文件内容"><span class="nav-number">5.</span> <span class="nav-text">查看文件内容</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#删除某个文件夹及下面所有文件"><span class="nav-number">6.</span> <span class="nav-text">删除某个文件夹及下面所有文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建文件夹"><span class="nav-number">7.</span> <span class="nav-text">创建文件夹</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#创建文件"><span class="nav-number">8.</span> <span class="nav-text">创建文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#重命名文件（将文件1改名为文件2）"><span class="nav-number">9.</span> <span class="nav-text">重命名文件（将文件1改名为文件2）</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#移动文件"><span class="nav-number">10.</span> <span class="nav-text">移动文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#复制文件"><span class="nav-number">11.</span> <span class="nav-text">复制文件</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#不解压的情况下，打开压缩包"><span class="nav-number">12.</span> <span class="nav-text">不解压的情况下，打开压缩包</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#文本编辑vi相关命令"><span class="nav-number">13.</span> <span class="nav-text">文本编辑vi相关命令</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#打包与压缩相关命令"><span class="nav-number">14.</span> <span class="nav-text">打包与压缩相关命令</span></a></li></ol><li class="nav-item nav-level-2"><a class="nav-link" href="#一些其他的问题"><span class="nav-number"></span> <span class="nav-text">一些其他的问题</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#为什么要在linux命令前加上"><span class="nav-number">1.</span> <span class="nav-text">为什么要在linux命令前加上 ./</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#【Linux】-获取root权限命令"><span class="nav-number">2.</span> <span class="nav-text">【Linux】- 获取root权限命令</span></a></li></ol></li></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
